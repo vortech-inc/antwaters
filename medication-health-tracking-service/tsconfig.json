@@ -1,0 +1,16 @@
+{
+	"extends": "@tsconfig/node16/tsconfig.json",
+    "compilerOptions": {
+    "outDir": "dist",
+    "module": "Node16",
+    "target": "ES2022",
+    "experimentalDecorators": true,
+    "emitDecoratorMetadata": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true
+    },
+    "exclude": ["node_modules"],
+    "include": ["src"]
+}
+
+
