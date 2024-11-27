@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 
 const medicalRecordSchema = new mongoose.Schema({
+ 
     recordType: {
         type: String,
         required: true
@@ -22,15 +23,10 @@ const medicalRecordSchema = new mongoose.Schema({
         type: Object,       
         required: true
     }
-    ,
-    updatedAt: {
-        type: String,
-        required: true
-    },
-    createdAt: {
-        type: String,
-        required: true
-    }
+ 
+},
+{
+    timestamps: true, 
 })
 
 export const MedicalRecord = mongoose.model("MedicalRecord", medicalRecordSchema)

@@ -15,4 +15,3 @@ app.listen(port, ()=> {
 
 
 dbConnection()
-console.log("first")
