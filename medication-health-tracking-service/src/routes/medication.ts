@@ -1,5 +1,5 @@
 import express from "express"
-import {  createUserMedication,  delUserMedication, getUserMedication, getUserMedications, updateMedication } from "../controller/medical_records"
+import {  createUserMedication,  delUserMedication, getUserMedication, getUserMedications, updateMedication } from "../controller/medication-controller"
 const medicalRecordRouter = express.Router()
 
 medicalRecordRouter.post("/", createUserMedication)
