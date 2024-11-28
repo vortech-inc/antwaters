@@ -19,8 +19,6 @@ export interface UserIdProps {
 export interface IMedicalRecord extends Document {
     recordType: string;
     patient_id: string;
-    // patient_id: Types.ObjectId; // Represents the ObjectId
-
     body: string;
     status: 'pending' | 'approved' | 'rejected';
     data: Record<string, any>; 
