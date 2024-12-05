@@ -1,28 +1,24 @@
 import mongoose from "mongoose";
 
-const appointmentSchema = new mongoose.Schema({
+const availaibilitySchema = new mongoose.Schema({
 
-    patient_id: {
-        type: mongoose.Types.ObjectId,
-         ref: 'User',
-        required: true
-    },
     provider_id: {
         type: mongoose.Types.ObjectId,
          ref: 'User',
         required: true
     },
 
-    note: [{
-        type: String,
-    }],
-    status: {
-        type: String,    
-        enum: ["scheduled", "rescheduled", "cancelled", "completed"],
+    isBlocked: {
+        type: Boolean,    
+        default: false,
         required: true
     }
     ,
-    dateTime: {
+    availableFrom: {
+        type: Date,       
+        required: true
+    },
+    availableTo: {
         type: Date,       
         required: true
     },
@@ -42,4 +38,4 @@ const appointmentSchema = new mongoose.Schema({
   }
 })
 
-export const Appointment = mongoose.model("Appointment", appointmentSchema)
+export const Availability = mongoose.model("Availability", availaibilitySchema)
