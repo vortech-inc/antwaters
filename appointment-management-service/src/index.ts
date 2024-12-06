@@ -17,7 +17,7 @@ app.use((req: Request) => {
 
 app.use(ErrorHandler.handle)
 
-dbConnection()
 app.listen(config.port,  () => {
     console.log(`Server running on Port ${config.port}`)
 })
+dbConnection()

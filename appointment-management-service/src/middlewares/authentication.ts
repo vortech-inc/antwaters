@@ -10,7 +10,8 @@ export const authenticateUser = (req: any, res: Response, next: NextFunction) =>
     const token = req.headers["authorization"]?.split(" ")[1];  // Extract token from header
 
     if (!token) {
-        return next(new ApiError(StatusCodes.FORBIDDEN, "Access denied"));
+    //  next(new ApiError(StatusCodes.FORBIDDEN, "Access denied"));
+    throw new ApiError(StatusCodes.FORBIDDEN, "Access denied: no token provided")
     }
 
     if (!config.secretKey) {
@@ -18,9 +19,9 @@ export const authenticateUser = (req: any, res: Response, next: NextFunction) =>
     }
 
     jwt.verify(token, config.secretKey, (err: any, decode: any) => {
-        console.log(token)
+
         if (err) {
-            return next(new ApiError(StatusCodes.FORBIDDEN, "Invalid or expired token"));
+             throw new ApiError(StatusCodes.FORBIDDEN, "Invalid or expired token")
         }
 
         // Attach user payload to request object

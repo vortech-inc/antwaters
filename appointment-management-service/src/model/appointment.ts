@@ -14,7 +14,11 @@ const appointmentSchema = new mongoose.Schema({
     },
 
     note: [{
-        type: String,
+        content: {
+            type: String,
+
+        }
+
     }],
     status: {
         type: String,    

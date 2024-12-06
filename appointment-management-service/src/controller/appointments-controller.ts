@@ -1,30 +1,36 @@
 import {Request, Response, NextFunction } from "express";
 import { createChannel, subscribeMessage } from "../utils/index";
-import MedicalRecordService from "../services/appointment-service";
+import AppointmentService from "../services/appointment-service";
 
 import { StatusCodes } from "http-status-codes";
 import { ApiError } from "../utils/ApiError";
 
-const service = new MedicalRecordService()
+const service = new AppointmentService()
 
 export const createUserAppointment = async(req: any, res: Response, next: NextFunction) => {
 
 
-    try {
-        
-  
-    const {user_id} = req.user
+    try {        
+    const {id} = req.user
+
+    if(!id){
+      throw  new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Something went wrong" )
+
+    }
 
     const {provider_id, patient_id, dateTime, note, status } = req.body
 
-    const newAppointment = service.createAppointment({provider_id, patient_id, dateTime, note, status })
+    const newAppointment = await service.createAppointment({provider_id, patient_id: id, dateTime, note, status })
+    console.log(newAppointment)
     res.status(StatusCodes.OK).json({
         data: newAppointment,
         message: "record created",
         success: true
     })
 } catch (error) {
-        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to fetch records")
+
+    next(error)
+
 
 
 }
@@ -36,18 +42,33 @@ export const createUserAppointment = async(req: any, res: Response, next: NextFu
 export const getUserAppointments = async(req: any, res: Response, next: NextFunction) => {
     try {
         
-  
-        // const {user_id} = req.user
+        const {id} = req.params
     
-        const records = await service.getAppointments()
+        const records = await service.getAppointments({id })
         res.status(StatusCodes.OK).json({
             data: records,
             message: "record fetched",
             success: true
         })
     } catch (error) {
-            throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to fetch records")
+        next(error)
     
+    
+    }
+}
+export const getMeAppointments = async(req: any, res: Response, next: NextFunction) => {
+    try {
+        const {id} = req.user
+    
+        const records = await service.getAppointments({id })
+        res.status(StatusCodes.OK).json({
+            data: records,
+            message: "record fetched",
+            success: true
+        })
+    } catch (error) {
+
+        next(error)
     
     }
 }
@@ -58,16 +79,16 @@ export const getUserAppointment = async(req: any, res: Response, next: NextFunct
     }
     try {        
         
-        const {id}  = req.params        
-    
-        const record = service.getAppointment({id})
+        const {id}  = req.params     
+        const record = await service.getAppointment({id})
         res.status(StatusCodes.OK).json({
             data: record,
-            message: "record created",
+            message: "appointment record created",
             success: true
         })
     } catch (error) {
-            throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to fetch record")
+            // throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to fetch record")
+            throw error
     
     
     }
@@ -103,15 +124,16 @@ export const updateUserAppointment = async(req: any, res: Response, next: NextFu
         const {provider_id, patient_id, dateTime, note, status } = req.body
      
     
-        const record = service.updateAppointment({id, provider_id, patient_id, dateTime, note, status })
+        const record = await service.updateAppointment({id, provider_id, patient_id, dateTime, note, status })
+        console.log( record)
+
         res.status(StatusCodes.OK).json({
             data: record,
             message: "record updated",
             success: true
         })
-    } catch (error) {
-            throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to update record")
+    } catch (error) {  
     
-    
+        next(error)
     }
 }

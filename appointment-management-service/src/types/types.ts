@@ -11,7 +11,7 @@ export interface IAppointment {
     provider_id: string;
     patient_id:  string 
     dateTime: Date;
-    note: string
+    note: {content?: string}
     status: "scheduled"| "rescheduled" | "cancelled" | "completed",
 
 }
