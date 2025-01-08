@@ -29,9 +29,8 @@ class MessageService {
     createMessage = async ({sender_id, receiver_id, content }: IMessage )  => {
 
         try {
-
-            const newMessage = await  Message.create({sender_id, receiver_id, content }) 
-               return newMessage 
+            const newMessage = await  Message.create({sender: sender_id , receiver: receiver_id, content }) 
+            return newMessage 
 
         } catch (error) {
             console.error(error)
@@ -42,16 +41,16 @@ class MessageService {
 
     }
 
-    getMessages = async ()   => {
+    getMessages = async ({sender_id, recipient_id}: {sender_id: string, recipient_id: string})   => {
 
         try {
 
-            const messages = await Message.find() 
+            const messages = await Message.find({ $or: [{sender: sender_id}, {recipient: recipient_id}]}) 
                return messages 
 
         } catch (error) {
             console.error(error)
-            throw new  ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "hhey")
+            throw new  ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "couldn't find message")
             
         }
 

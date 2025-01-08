@@ -1,29 +1,28 @@
 import {Request, Response, NextFunction } from "express";
-import MedicalRecordService from "../services/message-service";
+import MessageService from "../services/message-service";
 
 import { StatusCodes } from "http-status-codes";
 import { ApiError } from "../utils/ApiError";
 
-const service = new MedicalRecordService()
+const service = new MessageService()
 
 export const createUserMessage = async(req: any, res: Response, next: NextFunction) => {
 
 
     try {        
   
-    // const {user_id} = req.user
-
     const {sender_id, receiver_id, content } = req.body
 
-    const newAppointment = service.createMessage({sender_id, receiver_id, content })
+    const newMessage = service.createMessage({sender_id, receiver_id, content })
     res.status(StatusCodes.OK).json({
-        data: newAppointment,
+        data: newMessage,
         message: "message created",
         success: true
     })
 } catch (error) {
-        throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to fetch records")
+    next(error)
 
+    
 
 }
 
@@ -35,17 +34,17 @@ export const getUserMessages = async(req: any, res: Response, next: NextFunction
     try {
         
   
-        // const {user_id} = req.user
+        const {sender_id, recipient_id} = req.body
     
-        const messages = await service.getMessages()
+        const messages = await service.getMessages({sender_id, recipient_id})
         res.status(StatusCodes.OK).json({
             data: messages,
             message: "record fetched",
             success: true
         })
     } catch (error) {
-            throw new ApiError(StatusCodes.INTERNAL_SERVER_ERROR, "Failed to fetch records")
-    
+
+        next(error)
     
     }
 }
